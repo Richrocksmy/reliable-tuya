@@ -1,7 +1,6 @@
 package org.richrocksmy.tuya.reliabletuya.iot;
 
 import org.richrocksmy.tuya.reliabletuya.model.Device;
-import org.richrocksmy.tuya.reliabletuya.model.State;
 
 import java.util.List;
 
@@ -12,5 +11,5 @@ public interface IoTController {
 
     void turnDeviceOff(String deviceId);
 
-    State queryState(String deviceId);
+    Device.State queryState(String deviceId);
 }

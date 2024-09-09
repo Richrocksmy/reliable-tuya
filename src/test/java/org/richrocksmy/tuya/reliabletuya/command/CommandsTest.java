@@ -1,5 +1,6 @@
 package org.richrocksmy.tuya.reliabletuya.command;
 
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.richrocksmy.tuya.reliabletuya.model.Device;
@@ -8,7 +9,6 @@ import org.richrocksmy.tuya.reliabletuya.service.DeviceService;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -29,8 +29,10 @@ class  CommandsTest {
         verify(output).write(outputArgumentCaptor.capture(), any());
 
         List<Device> receivedDevices = outputArgumentCaptor.getValue();
-        assertThat(receivedDevices).isNotEmpty();
-        assertThat(receivedDevices).contains(device);
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(receivedDevices).isNotEmpty();
+        softly.assertThat(receivedDevices).contains(device);
+        softly.assertAll();
     }
 
     @Test

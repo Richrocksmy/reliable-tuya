@@ -2,7 +2,6 @@ package org.richrocksmy.tuya.reliabletuya.iot.tuya;
 
 import org.richrocksmy.tuya.reliabletuya.iot.IoTController;
 import org.richrocksmy.tuya.reliabletuya.model.Device;
-import org.richrocksmy.tuya.reliabletuya.model.State;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +34,7 @@ public class TuyaIoT implements IoTController {
     }
 
     @Override
-    public State queryState(String deviceId) {
+    public Device.State queryState(String deviceId) {
         return null;
     }
 }
