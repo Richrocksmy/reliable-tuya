@@ -1,4 +1,5 @@
 # Reliable Tuya
+![Build status](https://github.com/Richrocksmy/reliable-tuya/actions/workflows/main-test.yml/badge.svg)
 
 Tuya / Smart Life make good value smart home IoT products but they are fundamentally unreliable in my home. The aim behind this project is a simple application that enhances their reliability by maintaining
 a persistent store representing the global source of truth for the state of devices linked to a given Tuya / Smart Life account.
@@ -54,7 +55,7 @@ You may also need to update your `connector.region` value in the application.pro
 
 # Running the Application
 
-*Note: You will need to set `--add-opens java.base/java.lang=ALL-UNNAMED` in the VM options of your IDE run configuration as the Tuya connector won't work without this.
+*Note: You will need to set `--add-opens java.base/java.lang=ALL-UNNAMED` in the VM options of your IDE run configuration as the Tuya connector won't work without this.        
 
 Currently the app is only configured to run from the IDE (working on a Docker compose for this). 
 
