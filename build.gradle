@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.3'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id 'com.diffplug.spotless' version '7.0.0.BETA2'
 }
 
 group = 'org.richrocksmy.tuya'
@@ -21,17 +22,20 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven {
+		url "https://maven-other.tuya.com/repository/maven-public/"
+	}
+
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.shell:spring-shell-starter:3.3.2'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.shell:spring-shell-starter:3.3.2'
+	implementation 'com.tuya:tuya-spring-boot-starter:1.4.9'
+
 	implementation 'com.mysql:mysql-connector-j:9.0.0'
-	implementation 'org.testcontainers:mysql:1.20.1'
-	implementation 'org.testcontainers:testcontainers:1.20.1'
-	implementation 'org.springframework.boot:spring-boot-testcontainers:3.3.3'
-	implementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'de.vandermeer:asciitable:0.3.2'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -39,7 +43,10 @@ dependencies {
 	testImplementation 'org.mockito:mockito-core:3.+'
 	testImplementation 'org.assertj:assertj-core:3.11.1'
 	testImplementation 'org.testcontainers:junit-jupiter:1.20.1'
-
+	testImplementation 'org.testcontainers:mysql:1.20.1'
+	testImplementation 'org.testcontainers:testcontainers:1.20.1'
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers:3.3.3'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

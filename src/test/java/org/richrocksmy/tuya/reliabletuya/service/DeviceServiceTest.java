@@ -21,7 +21,7 @@ class DeviceServiceTest {
         IoTController ioTController = mock(IoTController.class);
         DeviceService deviceService = new DeviceService(ioTController, deviceRepository);
 
-        List<Device> devices = List.of(new Device());
+        List<Device> devices = List.of(Device.builder().deviceId("123456Id").name("Kitchen Light").build());
         when(ioTController.getAllDevices()).thenReturn(devices);
         List<Device> returnedDevices = deviceService.listDevices();
 

@@ -1,16 +1,15 @@
 package org.richrocksmy.tuya.reliabletuya;
 
-import org.richrocksmy.tuya.reliabletuya.config.TestContainerConfig;
+import com.tuya.connector.spring.annotations.ConnectorScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@ConnectorScan(basePackages = "org.richrocksmy.tuya.reliabletuya.iot")
 public class ReliableTuyaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.from(ReliableTuyaApplication::main)
-				.with(TestContainerConfig.class)
-				.run(args);
+		SpringApplication.run(ReliableTuyaApplication.class, args);
 	}
 
 }

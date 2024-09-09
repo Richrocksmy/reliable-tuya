@@ -5,14 +5,12 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.context.annotation.Bean;
 import org.testcontainers.containers.MySQLContainer;
 
-import javax.sql.DataSource;
-
 @TestConfiguration(proxyBeanMethods = false)
 public class TestContainerConfig {
 
     @Bean
     @ServiceConnection
-    MySQLContainer<?> neo4jContainer() {
+    MySQLContainer<?> mySqljContainer() {
         return new MySQLContainer<>("mysql:5.7.34");
     }
 }
