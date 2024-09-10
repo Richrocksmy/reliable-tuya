@@ -8,7 +8,7 @@ a persistent store representing the global source of truth for the state of devi
 
 ## Prerequisites
 
-- Java (>17) installed
+- Java (21) installed
 
 ## Configuration Values
 
@@ -20,7 +20,7 @@ You will need to following things to make this project work -
  Home Id
  ```
 
-Access id and access secret are available from the Tuya IoT project overview page - log in to the Tuya IoT platform [here](https://iot.tuya.com). Once logged in, from the left hand menu
+Access id and access secret are available from the Tuya IoT project overview page - log in to the Tuya IoT platform [here](https://iot.tuyaApi.com). Once logged in, from the left hand menu
 select 'Cloud', this will take you to your projects (you will need to create one if you don't already have one).
 Next click, 'Open Project' on the right hand side for the project you wish to integrate against, this will take you to 
 the project overview page, which displays the access id and access secret. 
@@ -47,7 +47,7 @@ Using the `Query Home List` API from the `Home Management` section of the API yo
 Add the home id in the application.properties:
 
 ```
-tuya.home-id=HOME_ID
+tuyaApi.home-id=HOME_ID
 ```
 
 **Note**

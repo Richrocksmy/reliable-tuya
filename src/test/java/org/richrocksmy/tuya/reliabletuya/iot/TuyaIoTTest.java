@@ -2,7 +2,9 @@ package org.richrocksmy.tuya.reliabletuya.iot;
 
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
-import org.richrocksmy.tuya.reliabletuya.iot.tuya.Tuya;
+import org.mockito.ArgumentCaptor;
+import org.richrocksmy.tuya.reliabletuya.iot.tuya.TuyaApi;
+import org.richrocksmy.tuya.reliabletuya.iot.tuya.TuyaCommand;
 import org.richrocksmy.tuya.reliabletuya.iot.tuya.TuyaDevice;
 import org.richrocksmy.tuya.reliabletuya.iot.tuya.TuyaIoT;
 import org.richrocksmy.tuya.reliabletuya.model.Device;
@@ -11,16 +13,15 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class TuyaIoTTest {
 
     @Test
     void shouldGetAllDevices() {
-        Tuya tuya = mock(Tuya.class);
+        TuyaApi tuyaApi = mock(TuyaApi.class);
         long homeId = 1234567;
-        TuyaIoT tuyaIoT = new TuyaIoT(homeId, tuya);
+        TuyaIoT tuyaIoT = new TuyaIoT(homeId, tuyaApi);
 
         TuyaDevice tuyaDevice = new TuyaDevice(
                 12345L,
@@ -44,25 +45,25 @@ class TuyaIoTTest {
                 System.currentTimeMillis(),
                 UUID.randomUUID().toString());
 
-        when(tuya.getAll(homeId)).thenReturn(List.of(tuyaDevice));
+        when(tuyaApi.getAllDevices(homeId)).thenReturn(List.of(tuyaDevice));
 
         List<Device> devices = tuyaIoT.getAllDevices();
 
-        assertThat(devices).hasSize(1);
-        SoftAssertions softly = new SoftAssertions();
-        Device device = devices.get(0);
-        softly.assertThat(device.getDeviceId()).as("Device id").isEqualTo("123456");
-        softly.assertThat(device.getIp()).as("IP").isEqualTo("127.0.0.1");
-        softly.assertThat(device.getLocalKey()).as("Local Key").isEqualTo("localKey");
-        softly.assertThat(device.getName()).as("Name").isEqualTo("House Light");
-        softly.assertAll();
+        assertThat(devices).satisfiesExactly(device -> {
+            SoftAssertions softly = new SoftAssertions();
+            softly.assertThat(device.getDeviceId()).as("Device id").isEqualTo("123456");
+            softly.assertThat(device.getIp()).as("IP").isEqualTo("127.0.0.1");
+            softly.assertThat(device.getLocalKey()).as("Local Key").isEqualTo("localKey");
+            softly.assertThat(device.getName()).as("Name").isEqualTo("House Light");
+            softly.assertAll();
+        });
     }
 
     @Test
     void shouldGetAllDevicesAndFilterEmptyObjects() {
-        Tuya tuya = mock(Tuya.class);
+        TuyaApi tuyaApi = mock(TuyaApi.class);
         long homeId = 1234567;
-        TuyaIoT tuyaIoT = new TuyaIoT(homeId, tuya);
+        TuyaIoT tuyaIoT = new TuyaIoT(homeId, tuyaApi);
 
         TuyaDevice tuyaDevice = new TuyaDevice(
                 12345L,
@@ -109,26 +110,56 @@ class TuyaIoTTest {
                 null,
                 null);
 
-        when(tuya.getAll(homeId)).thenReturn(List.of(tuyaDevice, nullTuyaDevice));
+        when(tuyaApi.getAllDevices(homeId)).thenReturn(List.of(tuyaDevice, nullTuyaDevice));
 
         List<Device> devices = tuyaIoT.getAllDevices();
 
-        assertThat(devices).hasSize(1);
-        SoftAssertions softly = new SoftAssertions();
-        Device device = devices.get(0);
-        softly.assertThat(device.getDeviceId()).as("Device id").isEqualTo("123456");
-        softly.assertThat(device.getIp()).as("IP").isEqualTo("127.0.0.1");
-        softly.assertThat(device.getLocalKey()).as("Local Key").isEqualTo("localKey");
-        softly.assertThat(device.getName()).as("Name").isEqualTo("House Light");
-        softly.assertAll();
+        assertThat(devices).satisfiesExactly(device -> {
+            SoftAssertions softly = new SoftAssertions();
+            softly.assertThat(device.getDeviceId()).as("Device id").isEqualTo("123456");
+            softly.assertThat(device.getIp()).as("IP").isEqualTo("127.0.0.1");
+            softly.assertThat(device.getLocalKey()).as("Local Key").isEqualTo("localKey");
+            softly.assertThat(device.getName()).as("Name").isEqualTo("House Light");
+            softly.assertAll();
+        });
     }
 
     @Test
     void shouldTurnDeviceOn() {
+        TuyaApi tuyaApi = mock(TuyaApi.class);
+        long homeId = 1234567;
+        TuyaIoT tuyaIoT = new TuyaIoT(homeId, tuyaApi);
+
+        String deviceId = "1234Id";
+
+        tuyaIoT.turnDeviceOn(deviceId);
+
+        ArgumentCaptor<TuyaCommand> tuyaCommandArgumentCaptor = ArgumentCaptor.forClass(TuyaCommand.class);
+        verify(tuyaApi).sendCommands(eq(deviceId), tuyaCommandArgumentCaptor.capture());
+
+        TuyaCommand tuyaCommand = tuyaCommandArgumentCaptor.getValue();
+        assertThat(tuyaCommand.getCommands()).satisfiesExactly(device -> {
+            assertThat(tuyaCommand.getCommands()).containsExactly(TuyaCommand.TuyaCommandEntry.LIGHT_ON);
+        });
     }
 
     @Test
     void shouldTurnDeviceOff() {
+        TuyaApi tuyaApi = mock(TuyaApi.class);
+        long homeId = 1234567;
+        TuyaIoT tuyaIoT = new TuyaIoT(homeId, tuyaApi);
+
+        String deviceId = "1234Id";
+
+        tuyaIoT.turnDeviceOff(deviceId);
+
+        ArgumentCaptor<TuyaCommand> tuyaCommandArgumentCaptor = ArgumentCaptor.forClass(TuyaCommand.class);
+        verify(tuyaApi).sendCommands(eq(deviceId), tuyaCommandArgumentCaptor.capture());
+
+        TuyaCommand tuyaCommand = tuyaCommandArgumentCaptor.getValue();
+        assertThat(tuyaCommand.getCommands()).satisfiesExactly(device -> {
+            assertThat(tuyaCommand.getCommands()).containsExactly(TuyaCommand.TuyaCommandEntry.LIGHT_OFF);
+        });
     }
 
     @Test
