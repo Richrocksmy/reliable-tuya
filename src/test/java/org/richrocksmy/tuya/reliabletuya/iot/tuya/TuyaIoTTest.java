@@ -193,6 +193,47 @@ class TuyaIoTTest {
     }
 
     @Test
+    void shouldReturnSingleDevice() {
+        TuyaApi tuyaApi = mock(TuyaApi.class);
+        String deviceId = "123456Id";
+
+        TuyaDevice tuyaDevice = new TuyaDevice(
+                12345L,
+                0,
+                "light",
+                System.currentTimeMillis(),
+                "lamp",
+                deviceId,
+                "127.0.0.1",
+                "localKey",
+                "Model",
+                "House Light",
+                true,
+                "12345OwnerId",
+                "12345ProductId",
+                "Generic Lamp",
+                null,
+                true,
+                "UTC",
+                UUID.randomUUID().toString(),
+                System.currentTimeMillis(),
+                UUID.randomUUID().toString());
+
+        when(tuyaApi.getDevice(deviceId)).thenReturn(tuyaDevice);
+        long homeId = 1234567;
+        TuyaIoT tuyaIoT = new TuyaIoT(homeId, tuyaApi);
+
+        Device device = tuyaIoT.getDevice(deviceId);
+
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(device.getDeviceId()).isEqualTo(deviceId);
+        softly.assertThat(device.getIp()).isEqualTo("127.0.0.1");
+        softly.assertThat(device.getLocalKey()).isEqualTo("localKey");
+        softly.assertThat(device.getName()).isEqualTo("House Light");
+        softly.assertAll();
+    }
+
+    @Test
     void ShouldQueryState() {
 
     }

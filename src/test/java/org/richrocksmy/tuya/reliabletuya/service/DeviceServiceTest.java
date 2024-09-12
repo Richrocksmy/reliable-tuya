@@ -8,12 +8,10 @@ import org.richrocksmy.tuya.reliabletuya.model.Device;
 import org.richrocksmy.tuya.reliabletuya.repository.DeviceRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class DeviceServiceTest {
 
@@ -33,14 +31,14 @@ class DeviceServiceTest {
     }
 
     @Test
-    void turnDeviceOn() {
+    void shouldTurnDeviceOn() {
         DeviceRepository deviceRepository = mock(DeviceRepository.class);
         IoTController ioTController = mock(IoTController.class);
         DeviceService deviceService = new DeviceService(ioTController, deviceRepository);
 
         String deviceId = "123456id";
-        Device device = Device.builder().id(1L).deviceId(deviceId).state(Device.State.OFF.toString()).build();
-        when(deviceRepository.findDeviceByDeviceId(deviceId)).thenReturn(device);
+        Device device = Device.builder().id(1L).deviceId(deviceId).state(Device.State.OFF).build();
+        when(deviceRepository.findDeviceByDeviceId(deviceId)).thenReturn(Optional.of(device));
 
         deviceService.turnDeviceOn(deviceId);
 
@@ -57,14 +55,66 @@ class DeviceServiceTest {
     }
 
     @Test
-    void turnDeviceOff() {
+    void shouldTurnDeviceOnWhenDoesNotExistLocally() {
         DeviceRepository deviceRepository = mock(DeviceRepository.class);
         IoTController ioTController = mock(IoTController.class);
         DeviceService deviceService = new DeviceService(ioTController, deviceRepository);
 
         String deviceId = "123456id";
-        Device device = Device.builder().id(1L).deviceId(deviceId).state(Device.State.ON.toString()).build();
-        when(deviceRepository.findDeviceByDeviceId(deviceId)).thenReturn(device);
+        Device device = Device.builder().id(1L).deviceId(deviceId).state(Device.State.OFF).build();
+        when(deviceRepository.findDeviceByDeviceId(deviceId)).thenReturn(Optional.empty());
+        when(ioTController.getDevice(deviceId)).thenReturn(device);
+
+        deviceService.turnDeviceOn(deviceId);
+
+        ArgumentCaptor<Device> deviceArgumentCaptor = ArgumentCaptor.forClass(Device.class);
+        verify(deviceRepository).save(deviceArgumentCaptor.capture());
+
+        Device updatedDevice = deviceArgumentCaptor.getValue();
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(updatedDevice.getDeviceId()).isEqualTo(deviceId);
+        softly.assertThat(updatedDevice.getState()).isEqualTo(Device.State.ON);
+        softly.assertAll();
+
+        verify(ioTController).getDevice(deviceId);
+        verify(ioTController).turnDeviceOn(deviceId);
+    }
+
+    @Test
+    void shouldTurnDeviceOffWhenDoesNotExistLocally() {
+        DeviceRepository deviceRepository = mock(DeviceRepository.class);
+        IoTController ioTController = mock(IoTController.class);
+        DeviceService deviceService = new DeviceService(ioTController, deviceRepository);
+
+        String deviceId = "123456id";
+        Device device = Device.builder().id(1L).deviceId(deviceId).state(Device.State.OFF).build();
+        when(deviceRepository.findDeviceByDeviceId(deviceId)).thenReturn(Optional.empty());
+        when(ioTController.getDevice(deviceId)).thenReturn(device);
+
+        deviceService.turnDeviceOn(deviceId);
+
+        ArgumentCaptor<Device> deviceArgumentCaptor = ArgumentCaptor.forClass(Device.class);
+        verify(deviceRepository).save(deviceArgumentCaptor.capture());
+
+        Device updatedDevice = deviceArgumentCaptor.getValue();
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(updatedDevice.getDeviceId()).isEqualTo(deviceId);
+        softly.assertThat(updatedDevice.getState()).isEqualTo(Device.State.ON);
+        softly.assertAll();
+
+        verify(ioTController).getDevice(deviceId);
+        verify(ioTController).turnDeviceOn(deviceId);
+    }
+
+    @Test
+    void shouldTurnDeviceOff() {
+        DeviceRepository deviceRepository = mock(DeviceRepository.class);
+        IoTController ioTController = mock(IoTController.class);
+        DeviceService deviceService = new DeviceService(ioTController, deviceRepository);
+
+        String deviceId = "123456id";
+        Device device = Device.builder().id(1L).deviceId(deviceId).state(Device.State.ON).build();
+        when(deviceRepository.findDeviceByDeviceId(deviceId)).thenReturn(Optional.of(device));
 
         deviceService.turnDeviceOff(deviceId);
 

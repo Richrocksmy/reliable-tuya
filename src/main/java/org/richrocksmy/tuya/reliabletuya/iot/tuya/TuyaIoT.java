@@ -26,6 +26,12 @@ public class TuyaIoT implements IoTController {
     public List<Device> getAllDevices() {
         return tuyaApi.getAllDevices(HOME_ID).stream().filter(it -> it.id() != null).map(Device::new).toList();
     }
+
+    @Override
+    public Device getDevice(String deviceId) {
+        return new Device(tuyaApi.getDevice(deviceId));
+    }
+
     @Override
     public boolean turnDeviceOn(final String deviceId) {
         return tuyaApi.sendCommands(deviceId, new TuyaCommand.Builder()

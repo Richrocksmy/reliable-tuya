@@ -23,15 +23,10 @@ public class DeviceService {
     }
 
     public boolean turnDeviceOn(final String deviceId) {
-//        Device device = deviceRepository.findDeviceByDeviceId(deviceId);
-//
-//        if(device == null) {
-//            device = new Device();
-//            device.setDeviceId(deviceId);
-//        }
-//
-//        device.setState(Device.State.ON.toString());
-//        deviceRepository.save(device);
+        Device device = deviceRepository.findDeviceByDeviceId(deviceId).orElseGet(() -> ioTController.getDevice(deviceId));
+
+        device.setState(Device.State.ON);
+        deviceRepository.save(device);
 
         // This next call can potentially fail, we _don't_
         // want to roll back the above database update in
@@ -42,15 +37,9 @@ public class DeviceService {
     }
 
     public boolean turnDeviceOff(final String deviceId) {
-//        Device device = deviceRepository.findDeviceByDeviceId(deviceId);
-//
-//        if(device == null) {
-//            device = new Device();
-//            device.setDeviceId(deviceId);
-//        }
-//
-//        device.setState(Device.State.OFF.toString());
-//        deviceRepository.save(device);
+        Device device = deviceRepository.findDeviceByDeviceId(deviceId).orElseGet(() -> ioTController.getDevice(deviceId));
+        device.setState(Device.State.OFF);
+        deviceRepository.save(device);
 
         return ioTController.turnDeviceOff(deviceId);
     }

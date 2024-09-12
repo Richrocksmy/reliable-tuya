@@ -14,7 +14,7 @@ public interface TuyaApi {
     List<TuyaDevice> getAllDevices(@Path("home_id") final long homeId);
 
     @GET("/v1.0/devices/{device_id}")
-    TuyaDevice getById(@Path("device_id") final String deviceId);
+    TuyaDevice getDevice(@Path("device_id") final String deviceId);
 
     @POST("/v1.0/devices/{device_id}/commands")
     Boolean sendCommands(@Path("device_id") final String deviceId, @Body final Map<String, Object> tuyaCommand);

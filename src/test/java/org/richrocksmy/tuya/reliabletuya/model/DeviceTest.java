@@ -12,7 +12,7 @@ class DeviceTest {
         var columnProvider = Device.getColumnProvider();
         List<String> headers = columnProvider.getFirst();
 
-        Device device = new Device(1L, "127.0.0.1", "12345", "localKey", "name", Device.State.ON.toString());
+        Device device = new Device(1L, "127.0.0.1", "12345", "localKey", "name", Device.State.ON);
         List<String> values = columnProvider.getSecond().apply(device);
 
         SoftAssertions softly = new SoftAssertions();

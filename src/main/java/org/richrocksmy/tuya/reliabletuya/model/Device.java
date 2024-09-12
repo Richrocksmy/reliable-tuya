@@ -1,9 +1,10 @@
 package org.richrocksmy.tuya.reliabletuya.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.richrocksmy.tuya.reliabletuya.iot.tuya.TuyaDevice;
 import org.springframework.data.util.Pair;
 
@@ -24,7 +25,7 @@ public class Device {
     }
 
     @Id
-    @Generated
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String ip;
@@ -35,7 +36,7 @@ public class Device {
 
     private String name;
 
-    private String state;
+    private State state;
 
     public Device(final TuyaDevice tuyaDevice) {
         this.ip = tuyaDevice.ip();

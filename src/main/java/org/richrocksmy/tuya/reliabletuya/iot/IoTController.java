@@ -7,9 +7,11 @@ import java.util.List;
 public interface IoTController {
 
     List<Device> getAllDevices();
-    boolean turnDeviceOn(String deviceId);
 
-    boolean turnDeviceOff(String deviceId);
+    Device getDevice(final String deviceId);
+    boolean turnDeviceOn(final String deviceId);
 
-    Device.State queryState(String deviceId);
+    boolean turnDeviceOff(final String deviceId);
+
+    Device.State queryState(final String deviceId);
 }
