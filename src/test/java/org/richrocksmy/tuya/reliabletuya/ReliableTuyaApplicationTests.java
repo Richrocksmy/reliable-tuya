@@ -5,6 +5,7 @@ import org.richrocksmy.tuya.reliabletuya.config.TestContainerConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -12,7 +13,7 @@ import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest
 @Testcontainers
-//@TestPropertySource(properties = "tuya.home-id=123456")
+@TestPropertySource(properties = "tuya.home-id=123456")
 class ReliableTuyaApplicationTests {
 
 	@Container
@@ -28,7 +29,6 @@ class ReliableTuyaApplicationTests {
 	}
 
 	@Test
-	void contextLoads() {
-	}
+	void contextLoads() {}
 
 }

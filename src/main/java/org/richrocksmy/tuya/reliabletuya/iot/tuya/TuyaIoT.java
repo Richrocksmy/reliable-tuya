@@ -27,19 +27,17 @@ public class TuyaIoT implements IoTController {
         return tuyaApi.getAllDevices(HOME_ID).stream().filter(it -> it.id() != null).map(Device::new).toList();
     }
     @Override
-    public void turnDeviceOn(final String deviceId) {
-        TuyaCommand tuyaCommand = new TuyaCommand.Builder()
+    public boolean turnDeviceOn(final String deviceId) {
+        return tuyaApi.sendCommands(deviceId, new TuyaCommand.Builder()
                 .addCommand(LIGHT_ON)
-                .build();
-        tuyaApi.sendCommands(deviceId, tuyaCommand);
+                .build().asInterfaceType());
     }
 
     @Override
-    public void turnDeviceOff(final String deviceId) {
-        TuyaCommand tuyaCommand = new TuyaCommand.Builder()
+    public boolean turnDeviceOff(final String deviceId) {
+        return tuyaApi.sendCommands(deviceId, new TuyaCommand.Builder()
                 .addCommand(LIGHT_OFF)
-                .build();
-        tuyaApi.sendCommands(deviceId, tuyaCommand);
+                .build().asInterfaceType());
     }
 
     @Override

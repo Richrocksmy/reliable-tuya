@@ -25,11 +25,11 @@ public class Commands {
 
     @ShellMethod(key="on")
     public void deviceOn(@Option(required = true, description = "The device id") String deviceId) {
-        deviceService.turnDeviceOn(deviceId);
+        output.write(deviceService.turnDeviceOn(deviceId));
     }
 
     @ShellMethod(key="off")
     public void deviceOff(@Option(required = true, description = "The device id") String deviceId) {
-        deviceService.turnDeviceOff(deviceId);
+        output.write(deviceService.turnDeviceOff(deviceId));
     }
 }

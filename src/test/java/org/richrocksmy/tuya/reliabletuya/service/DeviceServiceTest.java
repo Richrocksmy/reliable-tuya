@@ -39,7 +39,7 @@ class DeviceServiceTest {
         DeviceService deviceService = new DeviceService(ioTController, deviceRepository);
 
         String deviceId = "123456id";
-        Device device = Device.builder().id(1L).deviceId(deviceId).state(Device.State.OFF).build();
+        Device device = Device.builder().id(1L).deviceId(deviceId).state(Device.State.OFF.toString()).build();
         when(deviceRepository.findDeviceByDeviceId(deviceId)).thenReturn(device);
 
         deviceService.turnDeviceOn(deviceId);
@@ -63,7 +63,7 @@ class DeviceServiceTest {
         DeviceService deviceService = new DeviceService(ioTController, deviceRepository);
 
         String deviceId = "123456id";
-        Device device = Device.builder().id(1L).deviceId(deviceId).state(Device.State.ON).build();
+        Device device = Device.builder().id(1L).deviceId(deviceId).state(Device.State.ON.toString()).build();
         when(deviceRepository.findDeviceByDeviceId(deviceId)).thenReturn(device);
 
         deviceService.turnDeviceOff(deviceId);

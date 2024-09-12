@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public interface Output {
 
-    void write(String output);
+    void write(Object output);
 
     <T> void write(List<T> things, Pair<List<String>, Function<T, List<String>>> columnElementProvider);
 }

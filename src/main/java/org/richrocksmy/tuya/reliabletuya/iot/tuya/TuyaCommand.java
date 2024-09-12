@@ -1,14 +1,12 @@
 package org.richrocksmy.tuya.reliabletuya.iot.tuya;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Getter
 public class TuyaCommand {
 
     public enum TuyaCommandEntry {
@@ -17,12 +15,12 @@ public class TuyaCommand {
 
         private final Map<String, Object> entry;
 
-        private TuyaCommandEntry(final Map<String, Object> entry) {
+        TuyaCommandEntry(final Map<String, Object> entry) {
             this.entry = entry;
         }
 
-        public JsonElement asJson() {
-            return new Gson().toJsonTree(entry);
+        public Map<String, Object> asInterfaceType() {
+            return entry;
         }
     }
 
@@ -34,19 +32,8 @@ public class TuyaCommand {
         this.commands = commands;
     }
 
-    public List<TuyaCommandEntry> getCommands() {
-        return commands;
-    }
-
-    @Override
-    public String toString() {
-        JsonObject jsonObject = new JsonObject();
-        JsonArray jsonArray = new JsonArray();
-
-        commands.forEach(it -> jsonArray.add(it.asJson()));
-        jsonObject.add(COMMAND_KEY, jsonArray);
-
-        return jsonObject.toString();
+    public Map<String, Object> asInterfaceType() {
+        return Map.of(COMMAND_KEY, commands.stream().map(TuyaCommandEntry::asInterfaceType).toList());
     }
 
     public static class Builder {

@@ -1,15 +1,12 @@
-package org.richrocksmy.tuya.reliabletuya.iot;
+package org.richrocksmy.tuya.reliabletuya.iot.tuya;
 
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.richrocksmy.tuya.reliabletuya.iot.tuya.TuyaApi;
-import org.richrocksmy.tuya.reliabletuya.iot.tuya.TuyaCommand;
-import org.richrocksmy.tuya.reliabletuya.iot.tuya.TuyaDevice;
-import org.richrocksmy.tuya.reliabletuya.iot.tuya.TuyaIoT;
 import org.richrocksmy.tuya.reliabletuya.model.Device;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -125,44 +122,78 @@ class TuyaIoTTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void shouldTurnDeviceOn() {
         TuyaApi tuyaApi = mock(TuyaApi.class);
+        when(tuyaApi.sendCommands(any(), any())).thenReturn(true);
+
         long homeId = 1234567;
         TuyaIoT tuyaIoT = new TuyaIoT(homeId, tuyaApi);
 
         String deviceId = "1234Id";
 
-        tuyaIoT.turnDeviceOn(deviceId);
+        boolean result = tuyaIoT.turnDeviceOn(deviceId);
+        assertThat(result).isTrue();
 
-        ArgumentCaptor<TuyaCommand> tuyaCommandArgumentCaptor = ArgumentCaptor.forClass(TuyaCommand.class);
+        ArgumentCaptor<Map<String, Object>> tuyaCommandArgumentCaptor = ArgumentCaptor.forClass(Map.class);
         verify(tuyaApi).sendCommands(eq(deviceId), tuyaCommandArgumentCaptor.capture());
 
-        TuyaCommand tuyaCommand = tuyaCommandArgumentCaptor.getValue();
-        assertThat(tuyaCommand.getCommands()).satisfiesExactly(device -> {
-            assertThat(tuyaCommand.getCommands()).containsExactly(TuyaCommand.TuyaCommandEntry.LIGHT_ON);
+        List<Map<String, Object>> tuyaCommands = (List<Map<String, Object>>)((Map<String, Object>) tuyaCommandArgumentCaptor.getValue()).get("commands");
+
+        assertThat(tuyaCommands).satisfiesExactly(it -> {
+            assertThat(it).containsEntry("code", "switch_led").containsEntry("value", true);
         });
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void shouldTurnDeviceOff() {
         TuyaApi tuyaApi = mock(TuyaApi.class);
+        when(tuyaApi.sendCommands(any(), any())).thenReturn(true);
+
         long homeId = 1234567;
         TuyaIoT tuyaIoT = new TuyaIoT(homeId, tuyaApi);
 
         String deviceId = "1234Id";
 
-        tuyaIoT.turnDeviceOff(deviceId);
+        boolean result = tuyaIoT.turnDeviceOff(deviceId);
 
-        ArgumentCaptor<TuyaCommand> tuyaCommandArgumentCaptor = ArgumentCaptor.forClass(TuyaCommand.class);
+        assertThat(result).isTrue();
+        ArgumentCaptor<Map<String, Object>> tuyaCommandArgumentCaptor = ArgumentCaptor.forClass(Map.class);
         verify(tuyaApi).sendCommands(eq(deviceId), tuyaCommandArgumentCaptor.capture());
 
-        TuyaCommand tuyaCommand = tuyaCommandArgumentCaptor.getValue();
-        assertThat(tuyaCommand.getCommands()).satisfiesExactly(device -> {
-            assertThat(tuyaCommand.getCommands()).containsExactly(TuyaCommand.TuyaCommandEntry.LIGHT_OFF);
+        List<Map<String, Object>> tuyaCommands = (List<Map<String, Object>>)((Map<String, Object>) tuyaCommandArgumentCaptor.getValue()).get("commands");
+
+        assertThat(tuyaCommands).satisfiesExactly(it -> {
+            assertThat(it).containsEntry("code", "switch_led").containsEntry("value", false);
+        });
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void shouldTurnDeviceOffReturnsFailureWhenCallFails() {
+        TuyaApi tuyaApi = mock(TuyaApi.class);
+        when(tuyaApi.sendCommands(any(), any())).thenReturn(false);
+        long homeId = 1234567;
+        TuyaIoT tuyaIoT = new TuyaIoT(homeId, tuyaApi);
+
+        String deviceId = "1234Id";
+
+        boolean result = tuyaIoT.turnDeviceOff(deviceId);
+
+        assertThat(result).isFalse();
+        ArgumentCaptor<Map<String, Object>> tuyaCommandArgumentCaptor = ArgumentCaptor.forClass(Map.class);
+        verify(tuyaApi).sendCommands(eq(deviceId), tuyaCommandArgumentCaptor.capture());
+
+        List<Map<String, Object>> tuyaCommands = (List<Map<String, Object>>)((Map<String, Object>) tuyaCommandArgumentCaptor.getValue()).get("commands");
+
+        assertThat(tuyaCommands).satisfiesExactly(it -> {
+            assertThat(it).containsEntry("code", "switch_led").containsEntry("value", false);
         });
     }
 
     @Test
     void ShouldQueryState() {
+
     }
 }

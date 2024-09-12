@@ -35,7 +35,7 @@ public class Device {
 
     private String name;
 
-    private State state;
+    private String state;
 
     public Device(final TuyaDevice tuyaDevice) {
         this.ip = tuyaDevice.ip();
@@ -45,7 +45,7 @@ public class Device {
     }
 
     public static Pair<List<String>, Function<Device, List<String>>> getColumnProvider() {
-        return Pair.of(List.of("Id", "IP", "Device Id", "Local Key", "Name", "State"),
-                (device) -> List.of(String.valueOf(device.id), device.ip, device.deviceId, device.localKey, device.name, device.state.toString()));
+        return Pair.of(List.of("Id", "IP", "Device Id", "Local Key", "Name"),
+                (device) -> List.of(String.valueOf(device.id), device.ip, device.deviceId, device.localKey, device.name));
     }
 }

@@ -1,6 +1,7 @@
 package org.richrocksmy.tuya.reliabletuya.output;
 
 import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.asciitable.CWC_LongestLine;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
@@ -11,13 +12,16 @@ import java.util.function.Function;
 public class ConsoleOutput implements Output {
 
     @Override
-    public void write(String output) {
+    public void write(Object output) {
         System.out.println(output);
     }
 
     @Override
     public <T> void write(List<T> things, Pair<List<String>, Function<T, List<String>>> columnElementProvider) {
         AsciiTable asciiTable = new AsciiTable();
+        CWC_LongestLine cwc = new CWC_LongestLine();
+        asciiTable.getRenderer().setCWC(cwc);
+        asciiTable.setPadding(2);
         asciiTable.addRule();
         asciiTable.addRow(columnElementProvider.getFirst());
         asciiTable.addRule();
