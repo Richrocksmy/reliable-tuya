@@ -1,6 +1,10 @@
 package org.richrocksmy.tuya.reliabletuya.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +25,8 @@ public class Device {
 
     public enum State {
         ON,
-        OFF
+        OFF,
+        UNKNOWN
     }
 
     @Id
@@ -43,10 +48,12 @@ public class Device {
         this.deviceId = tuyaDevice.id();
         this.localKey = tuyaDevice.local_key();
         this.name = tuyaDevice.name();
+        this.state = State.UNKNOWN;
     }
 
     public static Pair<List<String>, Function<Device, List<String>>> getColumnProvider() {
-        return Pair.of(List.of("Id", "IP", "Device Id", "Local Key", "Name"),
-                (device) -> List.of(String.valueOf(device.id), device.ip, device.deviceId, device.localKey, device.name));
+        return Pair.of(List.of("Id", "IP", "Device Id", "Local Key", "Name", "State"),
+                (device) -> List.of(String.valueOf(device.id), device.ip, device.deviceId,
+                        device.localKey, device.name, device.state.toString()));
     }
 }

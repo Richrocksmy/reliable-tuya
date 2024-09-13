@@ -2,6 +2,7 @@ package org.richrocksmy.tuya.reliabletuya.output;
 
 import de.vandermeer.asciitable.AsciiTable;
 import de.vandermeer.asciitable.CWC_LongestLine;
+import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,6 @@ public class ConsoleOutput implements Output {
         AsciiTable asciiTable = new AsciiTable();
         CWC_LongestLine cwc = new CWC_LongestLine();
         asciiTable.getRenderer().setCWC(cwc);
-        asciiTable.setPadding(2);
         asciiTable.addRule();
         asciiTable.addRow(columnElementProvider.getFirst());
         asciiTable.addRule();
@@ -31,7 +31,8 @@ public class ConsoleOutput implements Output {
             asciiTable.addRule();
         });
 
-        asciiTable.addRule();
+        asciiTable.setTextAlignment(TextAlignment.CENTER);
+        asciiTable.setPadding(1);
         write(asciiTable.render());
     }
 }
