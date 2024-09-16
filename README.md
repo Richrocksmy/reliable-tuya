@@ -61,3 +61,37 @@ Currently the app is only configured to run from the IDE (working on a Docker co
 
 To start the app, run the main method in `ReliableTuyaApplicationTests` in the test package (this will start the production app 
 using a MySQL testcontainer to avoid the need for an embedded H2 database).
+
+# Functionality
+
+The app allows the following commands to be executed - 
+
+## list-devices
+
+This command will list all the devices available in the specified `HOME_ID`
+
+## on {device_id}
+
+Turn the specified device on (currently only works for lighting devices)
+
+## off {device_id}
+
+Turn the specified device off (currently only works for lighting devices)
+
+Once a device has been switched on or off it will be captured in the local database. This gives the option 
+for the app to constantly re-sync the device state (to ensure that it _is_ actually in the desired state).
+
+
+# Configuration
+
+To enable period re-sync of device state with the Tuya cloud, set the following to configuration value -
+
+```
+reliable-tuya.device-sync.enabled=true
+```
+
+To configure the re-sync delay (in seconds) -
+
+```
+reliable-tuya.device-sync.initial-delay=30
+```

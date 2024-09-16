@@ -32,4 +32,5 @@ public class Commands {
     public void deviceOff(@Option(required = true, description = "The device id") String deviceId) {
         deviceService.turnDeviceOff(deviceId);
     }
+    
 }

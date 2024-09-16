@@ -16,7 +16,8 @@ class DeviceStateSyncerTest {
     public void shouldSyncDeviceStateIfStateKnown() {
         DeviceRepository deviceRepository = mock(DeviceRepository.class);
         DeviceService deviceService = mock(DeviceService.class);
-        DeviceStateSyncer deviceStateSyncer = new DeviceStateSyncer(deviceService, deviceRepository);
+        DeviceStateSyncer deviceStateSyncer = new DeviceStateSyncer(false, 1, 1, deviceService,
+                deviceRepository);
 
         Device device1 = Device.builder().id(1L).deviceId("123457L").state(Device.State.ON).build();
         Device device2 = Device.builder().id(1L).deviceId("123457L").state(Device.State.OFF).build();
