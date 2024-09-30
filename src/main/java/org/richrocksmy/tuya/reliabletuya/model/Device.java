@@ -18,9 +18,9 @@ import java.util.function.Function;
 @Data
 @Entity
 @Builder
-@Table(name = "Devices")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "Devices")
 public class Device {
 
     public enum State {
