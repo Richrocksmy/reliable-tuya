@@ -93,5 +93,5 @@ reliable-tuya.device-sync.enabled=true
 To configure the re-sync delay (in seconds) -
 
 ```
-reliable-tuya.device-sync.initial-delay=30
+reliable-tuya.device-sync.period=10
 ```
